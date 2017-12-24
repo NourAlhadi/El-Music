@@ -55,3 +55,30 @@ def song_form(request):
         'form': form,
         'to_add': 'Song'
     })
+
+
+def show_album(request, id):
+    try:
+        album = Album.objects.filter(id=id)
+    except(Exception, BaseException):
+        return render(request,'main/http404.html')
+
+    if not album:
+        return render(request,'main/http404.html')
+    return render(request, 'main/details.html',{
+        'album':album
+    })
+
+
+def show_artist(request, id):
+    try:
+        artist = Artist.objects.filter(id=id)
+    except(Exception, BaseException):
+        return render(request,'main/http404.html')
+
+    if not artist:
+        return render(request,'main/http404.html')
+    return render(request, 'main/details.html',{
+        'album':artist
+    })
+

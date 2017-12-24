@@ -17,7 +17,7 @@ urlpatterns = [
     url(r'^add/song/$', views.song_form, name='add_song'),
 
     # /artist/<id>
-    #url(r'^album/?P<pk>$', views.show_album, name='show_album'),
+    url(r'^album/(?P<id>[0-9]+)/$', views.show_album, name='show_album'),
 
     # /
     url(r'^$', views.index, name='index'),
