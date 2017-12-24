@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+
+
+{% block body %}
+    <div class="alert alert-info">You're trying to add {{ to_add }}</div>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+
+    <p><a href="{% url 'main:index' %}">Return to home</a></p>
+
+{% endblock %}
