@@ -14,42 +14,29 @@
         </div>
         <!-- /.row -->
 
-        <!-- Row -->
-        <div class="row">
-            <div class="col-sm-6 col-md-3 portfolio-item">
-                <div class="item">
-                    <a class="text-center" href="#">
-                        <img class="img-responsive" height="80%" width="750px" src=""  alt="Hello">
-                        <h4>Rap God</h4>
-                    </a>
+        {% for song in songs %}
+            {% if forloop.first %}<div class="row">{% endif %}
+                <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-6 col-md-3 portfolio-item">
+                   <div class="item">
+                       <a class="text-center" href="{{ song.file_src.url }}">
+                            <img class="img-responsive" height="80%" width="750px" src="{{ song.album.logo.url }}" alt="{{ song.title }}">
+                            <h4>{{ song.title }}</h4>
+                       </a>
+                   </div>
+                </div>
+            {% if forloop.counter|divisibleby:4 %}</div><div class="row">{% endif %}
+            {% if forloop.last %}</div>{% endif %}
+        {% endfor %}
+
+        {% if songs.count == 0 %}
+            <!-- Row -->
+            <div class="row">
+                <div class="col-sm-8 alert alert-danger">
+                    No Songs Yet!!
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3 portfolio-item">
-                <div class="item">
-                    <a class="text-center" href="#">
-                        <img class="img-responsive" height="80%" width="750px" src=""  alt="Hello">
-                        <h4>Rap God</h4>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3 portfolio-item">
-                <div class="item">
-                    <a class="text-center" href="#">
-                        <img class="img-responsive" height="80%" width="750px" src=""  alt="Hello">
-                        <h4>Rap God</h4>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3 portfolio-item">
-                <div class="item">
-                    <a class="text-center" href="#">
-                        <img class="img-responsive" height="80%" width="750px" src=""  alt="Hello">
-                        <h4>Rap God</h4>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- /.row -->
+            <!-- /.row -->
+        {% endif %}
 
 
         <!-- Page Heading -->
@@ -61,44 +48,29 @@
         </div>
         <!-- /.row -->
 
-        <!-- Row -->
-        <div class="row">
-            <div class="col-sm-6 col-md-3 portfolio-item">
-                <div class="item">
-                    <a class="text-center" href="#">
-                        <img class="img-responsive" height="80%" width="750px" src=""  alt="Hello">
-                        <h4>Recovery</h4>
-                    </a>
+        {% for album in albums %}
+            {% if forloop.first %}<div class="row">{% endif %}
+                <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-6 col-md-3 portfolio-item">
+                   <div class="item">
+                       <a class="text-center" href="{% url 'main:show_album' album.id %}">
+                            <img class="img-responsive" height="80%" width="750px" src="{{ album.logo.url }}" alt="{{ album.title }}">
+                            <h4>{{ album.title }}</h4>
+                       </a>
+                   </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-md-3 portfolio-item">
-                <div class="item">
-                    <a class="text-center" href="#">
-                        <img class="img-responsive" height="80%" width="750px" src=""  alt="Hello">
-                        <h4>Recovery</h4>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3 portfolio-item">
-                <div class="item">
-                    <a class="text-center" href="#">
-                        <img class="img-responsive" height="80%" width="750px" src=""  alt="Hello">
-                        <h4>Recovery</h4>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3 portfolio-item">
-                <div class="item">
-                    <a class="text-center" href="#">
-                        <img class="img-responsive" height="80%" width="750px" src=""  alt="Hello">
-                        <h4>Recovery</h4>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- /.row -->
+            {% if forloop.counter|divisibleby:4 %}</div><div class="row">{% endif %}
+            {% if forloop.last %}</div>{% endif %}
+        {% endfor %}
 
-
+        {% if albums.count == 0 %}
+            <!-- Row -->
+            <div class="row">
+                <div class="col-sm-8 alert alert-danger">
+                    No Albums Yet!!
+                </div>
+            </div>
+            <!-- /.row -->
+        {% endif %}
 
         <!-- Page Heading -->
         <div class="row">
@@ -109,44 +81,29 @@
         </div>
         <!-- /.row -->
 
-        <!-- Row -->
-        <div class="row">
-            <div class="col-sm-6 col-md-3 portfolio-item">
-                <div class="item">
-                    <a class="text-center" href="#">
-                        <img class="img-responsive" height="80%" width="750px" src=""  alt="Hello">
-                        <h4>Eminem</h4>
-                    </a>
+        {% for artist in artists %}
+            {% if forloop.first %}<div class="row">{% endif %}
+                <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-6 col-md-3 portfolio-item">
+                   <div class="item">
+                       <a class="text-center" href="{% url 'main:show_artist' artist.id %}">
+                            <img class="img-responsive" height="80%" width="750px" src="{{ artist.image.url }}" alt="{{ artist.name }}">
+                            <h4>{{ artist.name }}</h4>
+                       </a>
+                   </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-md-3 portfolio-item">
-                <div class="item">
-                    <a class="text-center" href="#">
-                        <img class="img-responsive" height="80%" width="750px" src=""  alt="Hello">
-                        <h4>Eminem</h4>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3 portfolio-item">
-                <div class="item">
-                    <a class="text-center" href="#">
-                        <img class="img-responsive" height="80%" width="750px" src=""  alt="Hello">
-                        <h4>Eminem</h4>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3 portfolio-item">
-                <div class="item">
-                    <a class="text-center" href="#">
-                        <img class="img-responsive" height="80%" width="750px" src=""  alt="Hello">
-                        <h4>Eminem</h4>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- /.row -->
+            {% if forloop.counter|divisibleby:4 %}</div><div class="row">{% endif %}
+            {% if forloop.last %}</div>{% endif %}
+        {% endfor %}
 
-
+        {% if albums.count == 0 %}
+            <!-- Row -->
+            <div class="row">
+                <div class="col-sm-8 alert alert-danger">
+                    No Artists Yet!!
+                </div>
+            </div>
+            <!-- /.row -->
+        {% endif %}
 
     </div>
     <!-- /.container -->
@@ -163,12 +120,16 @@
             min-height: 200px!important;
             min-width: 90%!important;
             max-width: 90%!important;
+            margin: 0 auto!important;
+            border-radius: 3px!important;
         }
 
         .item{
             background-color: #9d9d9d;
             padding: 10px 0;
             text-align: center;
+            border-radius: 15px;
+            box-shadow: 5px 5px 5px 5px rgba(30,30,30,0.5);
         }
 
         .item > a{

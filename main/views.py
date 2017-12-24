@@ -10,7 +10,7 @@ def index(request):
 
     return render(request, 'main/index.html', {
         'albums': alb,
-        'artist': art,
+        'artists': art,
         'songs': song,
     })
 
@@ -79,6 +79,6 @@ def show_artist(request, id):
     if not artist:
         return render(request,'main/http404.html')
     return render(request, 'main/details.html',{
-        'album':artist
+        'artist':artist
     })
 

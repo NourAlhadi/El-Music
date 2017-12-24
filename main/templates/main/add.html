@@ -6,30 +6,27 @@
     <div class="container wrapper">
         <div class="alert alert-info">You're trying to add {{ to_add }}</div>
 
-        <form action="">
-            {%csrf_token%}
-            {% for error in form.non_field_errors %}
-                <div class="form-group has-errors text-danger small">
-                    {{ error }}
-                </div>
-                {% endfor %}
-                {% for field in form %}
-                    <div class="row text-default">
+        <form method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                {{ form.errors }}
+                <div class="row text-default">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
                         <div class="form-group has-errors text-danger small">
-                            {{ field.errors }}
-                        </div>
-
-                        <div class="form-group has-errors text-danger small">
-                        </div>
-
-                        <div class="form-group col-sm-2">
-                            {{ field.label }}
-                        </div>
-                        <div class="form-group col-sm-5">
+                            {{ error }}
                             {{ field }}
                         </div>
+                        {% endfor %}
+                    {% endfor %}
+                    <div class="form-group col-sm-2">
+                        {{ field.label }}
                     </div>
-                {% endfor %}
+                    <div class="form-group col-sm-5">
+                        {{ field }}
+                    </div>
+                </div>
+            {% endfor %}
 
             <input class="btn btn-default" type="submit" value="Add {{ to_add }}">
         </form>
@@ -46,8 +43,8 @@
         form *{
             color: #9d9d9d;
         }
-        select, ::placeholder{
-            color:black;
+        select, ::placeholder,input[type='text']{
+            color:black!important;
         }
         .col-sm-5 *{
             width: 100%!important;

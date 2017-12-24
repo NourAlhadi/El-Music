@@ -6,7 +6,6 @@ class ArtistForm(forms.ModelForm):
     class Meta:
         model = Artist
         fields = ('name', 'image', )
-
     name = forms.CharField(label='Artist Name', widget=forms.TextInput(attrs={'placeholder': 'Artist name'}))
     image = forms.FileField(label='Artist Image')
 
@@ -15,7 +14,6 @@ class AlbumForm(forms.ModelForm):
     class Meta:
         model = Album
         fields = ('artist', 'title', 'genre', 'logo', )
-
     title = forms.CharField(label='Album Title', widget=forms.TextInput(attrs={'placeholder': 'Album title'}))
     genre = forms.CharField(label='Album Genre', widget=forms.TextInput(attrs={'placeholder': 'Album genre'}))
     logo = forms.FileField(label='Album Logo')
