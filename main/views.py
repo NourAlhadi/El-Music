@@ -65,8 +65,9 @@ def show_album(request, id):
 
     if not album:
         return render(request,'main/http404.html')
-    return render(request, 'main/details.html',{
-        'album':album
+    album = album[0]
+    return render(request, 'main/show_albums.html', {
+        'album': album
     })
 
 
@@ -78,7 +79,8 @@ def show_artist(request, id):
 
     if not artist:
         return render(request,'main/http404.html')
-    return render(request, 'main/details.html',{
-        'artist':artist
+    artist = artist[0]
+    return render(request, 'main/show_artists.html',{
+        'artist': artist
     })
 
