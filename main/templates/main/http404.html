@@ -1,14 +1,27 @@
 {% extends 'main/base.html' %}
 
 
+{% block css %}
+    <style>
+
+        .error-cnt{
+            background-color: #222;
+            padding: 50px 20px;
+            color:#fff;
+            text-align: center;
+            font-size:20px;
+            font-family: "Menlo", "Consolas", "Bitstream Vera Sans Mono", "Courier New", monospace;
+        }
+
+    </style>
+{% endblock %}
+
 {% block body %}
 
-    <div class="container" style="background-color: #222; padding: 20px;">
-        <div class="alert alert-danger">
-            Sorry!! I'm sad to tell you this is 404 Not Found Page!!<br>
-            Something wen't wrong please try your request Again!!<br>
-            Thank you :D
-        </div>
+    <div class="container error-cnt">
+        Sorry!! I'm sad to tell you this is 404 Not Found Page!!<br>
+        Something wen't wrong please try your request Again!!<br>
+        Thank you :D
     </div>
 
 {% endblock %}

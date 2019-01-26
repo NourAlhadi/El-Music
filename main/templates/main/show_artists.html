@@ -27,26 +27,18 @@
 
                 <div class="thumbnail row">
                     <div class="col-xs-12 col-sm-6 col-md-3">
-                        <img height="200px" width="100%" src="{{ artist.image.url }}" alt="">
+                        <img class="image" height="200px" width="100%" src="{{ artist.image.url }}" alt="{{ artist.name }}">
                     </div>
                     <div class="col-xs-12 col-sm-6 col-md-9">
                         <div class="caption-full">
                             <h4>{{ artist.name }}</h4>
-                            <p>See more snippets like these online store reviews at <a target="_blank" href="http://bootsnipp.com">Bootsnipp - http://bootsnipp.com</a>.</p>
-                            <p>Want to make these reviews work? Check out
-                                <strong><a href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">this building a review system tutorial</a>
-                                </strong>over at maxoffsky.com!</p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                            <p> {{ artist.bio|safe }} </p>
                         </div>
                         <div class="ratings">
-                            <p class="pull-right">3 reviews</p>
+                            <p class="pull-right">{{ artist.review_set.all|length }}</p>
                             <p>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star-empty"></span>
-                                4.0 stars
+                                {{ star_temp|safe }}
+                                {{ stars }} stars
                             </p>
                         </div>
                     </div>
@@ -55,56 +47,76 @@
 
                 <!-- Start Of Reviews -->
                 <div class="well">
-
-                    <div class="text-right">
-                        <a class="btn btn-success">Leave a Review</a>
-                    </div>
-
-                    <hr>
-
                     <div class="row">
-                        <div class="col-md-12">
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                            Anonymous
-                            <span class="pull-right">10 days ago</span>
-                            <p>This product was great in terms of quality. I would definitely buy another!</p>
+                        <div class="form-wrap">
+                            <div class="stars"> Rating Stars:
+                                <span id="1" class="glyphicon glyphicon-star"></span>
+                                <span id="2" class="glyphicon glyphicon-star"></span>
+                                <span id="3" class="glyphicon glyphicon-star"></span>
+                                <span id="4" class="glyphicon glyphicon-star-empty"></span>
+                                <span id="5" class="glyphicon glyphicon-star-empty"></span>
+                            </div>
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input id="stars" type="hidden" value="3" name="stars">
+                                <input type="hidden" value=" {% if user.is_authenticated %} {{ user.username }} {% else %} Just a visitor {% endif %}" name="person">
+                                <textarea id="text-area" name="review" placeholder="A Short Review" required></textarea>
+                                <br /> <br />
+                                <input type="submit" class="btn btn-success" value="Leave a Review">
+                            </form>
+
                         </div>
                     </div>
 
                     <hr>
+                    <div class="clear"></div>
+                    {% for review in artist.review_set.all %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% if review.stars > 0 %}
+                                    <span class="glyphicon glyphicon-star"></span>
+                                {% endif %}
+                                {% if review.stars > 1 %}
+                                    <span class="glyphicon glyphicon-star"></span>
+                                {% endif %}
+                                {% if review.stars > 2 %}
+                                    <span class="glyphicon glyphicon-star"></span>
+                                {% endif %}
+                                {% if review.stars > 3 %}
+                                    <span class="glyphicon glyphicon-star"></span>
+                                {% endif %}
+                                {% if review.stars > 4 %}
+                                    <span class="glyphicon glyphicon-star"></span>
+                                {% endif %}
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                            Anonymous
-                            <span class="pull-right">12 days ago</span>
-                            <p>I've alredy ordered another one!</p>
+                                {% if review.stars < 5 %}
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                {% endif %}
+
+                                {% if review.stars < 4 %}
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                {% endif %}
+
+                                {% if review.stars < 3 %}
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                {% endif %}
+
+                                {% if review.stars < 2 %}
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                {% endif %}
+
+                                {% if review.stars < 1 %}
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                {% endif %}
+
+
+                                {{ review.person }}
+                                <span class="pull-right">{{ review.time }}</span>
+                                <p>{{ review.body }}</p>
+                            </div>
                         </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                            Anonymous
-                            <span class="pull-right">15 days ago</span>
-                            <p>I've seen some better than this, but not at this price. I definitely recommend this item.</p>
-                        </div>
-                    </div>
-
+                    {% if not forloop.last %}<hr>{% endif %}
+                    {% endfor %}
                 </div>
 
             </div>
@@ -145,7 +157,168 @@
         }
 
         .thumbnail{
+            padding: 20px;
+        }
+
+        .image{
+            -webkit-border-radius: 15px;
+            -moz-border-radius: 15px;
+            border-radius: 15px;
+
+            -webkit-box-shadow: 9px 9px 9px #e3e3e3;
+            -moz-box-shadow: 9px 9px 9px #e3e3e3;
+            box-shadow: 9px 9px 9px #e3e3e3;
+
+            border: 1px solid #eee;
+        }
+
+        #text-area{
+            resize: none;
+            width: 50%;
+        }
+
+        .form-wrap{
             padding: 0 20px;
         }
+
+        .form-wrap > *{
+            margin-bottom: 10px;
+        }
+
+        .stars {
+            width: 100%;
+        }
+
+        .stars > span{
+            padding-left: 10px;
+        }
+
     </style>
+{% endblock %}
+
+{% block js %}
+    <script>
+        //glyphicon-star-empty
+        $("#1").mouseenter(function(){
+            $("#1").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+        });
+
+        $("#2").mouseenter(function(){
+            $("#1").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#2").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+        });
+
+        $("#3").mouseenter(function(){
+            $("#1").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#2").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#3").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+        });
+
+
+        $("#4").mouseenter(function(){
+            $("#1").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#2").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#3").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#4").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+        });
+
+        $("#5").mouseenter(function(){
+            $("#1").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#2").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#3").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#4").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#5").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+        });
+
+        var lock1 = false;
+        var lock2 = false;
+        var lock3 = false;
+        var lock4 = false;
+        var lock5 = false;
+
+        $("#1").mouseleave(function(){
+            if (!lock1) $("#1").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock2) $("#2").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock3) $("#3").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock4) $("#4").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock5) $("#5").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+        });
+
+        $("#2").mouseleave(function(){
+            if (!lock1) $("#1").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock2) $("#2").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock3) $("#3").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock4) $("#4").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock5) $("#5").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+        });
+
+        $("#3").mouseleave(function(){
+            if (!lock1) $("#1").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock2) $("#2").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock3) $("#3").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock4) $("#4").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock5) $("#5").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+        });
+
+        $("#4").mouseleave(function(){
+            if (!lock1) $("#1").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock2) $("#2").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock3) $("#3").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock4) $("#4").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock5) $("#5").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+        });
+
+        $("#5").mouseleave(function(){
+            if (!lock1) $("#1").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock2) $("#2").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock3) $("#3").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock4) $("#4").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+            if (!lock5) $("#5").addClass("glyphicon-star-empty").removeClass("glyphicon-star");
+        });
+
+        $("#1").click(function(){
+            $("#1").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#stars").val("1");
+            lock1 = true;
+            lock2 = lock3 = lock4 = lock5 = false;
+        });
+
+        $("#2").click(function(){
+            $("#1").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#2").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#stars").val("2");
+            lock1 = lock2 = true;
+            lock3 = lock4 = lock5 = false;
+        });
+
+        $("#3").click(function(){
+            $("#1").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#2").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#3").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#stars").val("3");
+            lock1 = lock2 = lock3 = true;
+            lock4 = lock5 = false;
+        });
+
+
+        $("#4").click(function(){
+            $("#1").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#2").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#3").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#4").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#stars").val("4");
+            lock1 = lock2 = lock3 = lock4 = true;
+            lock5 = false;
+        });
+
+        $("#5").click(function(){
+            $("#1").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#2").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#3").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#4").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#5").removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+            $("#stars").val("5");
+            lock1 = lock2 = lock3 = lock4 = lock5 = true;
+        });
+    </script>
 {% endblock %}

@@ -79,8 +79,40 @@ def show_artist(request, id):
 
     if not artist:
         return render(request,'main/http404.html')
+
+    if request.method == "POST":
+        fstars = request.POST.get("stars")
+        freview = request.POST.get("review")
+        fperson = request.POST.get("person")
+        review = Review()
+        review.stars = fstars
+        review.body = freview
+        review.artist = artist[0]
+        review.person = fperson
+        review.save()
+
     artist = artist[0]
+
+    all_reviews = 0
+    stars = 0
+
+    reviews = artist.review_set
+    for review in reviews.iterator():
+        stars += review.stars
+        all_reviews += 1
+
+    stars /= max(all_reviews,1)
+    stars = round(stars)
+
+    star_temp = ""
+    for _ in range(stars):
+        star_temp += "<span class=\"glyphicon glyphicon-star\"></span>"
+    for _ in range(5 - stars):
+        star_temp += "<span class=\"glyphicon glyphicon-star-empty\"></span>"
+
     return render(request, 'main/show_artists.html',{
-        'artist': artist
+        'artist': artist,
+        'stars': stars,
+        'star_temp': star_temp
     })
 
