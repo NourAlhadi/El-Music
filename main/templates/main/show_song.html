@@ -7,35 +7,30 @@
 
         <div class="row">
 
-            <div class="col-md-3">
-                <p class="lead">{{ album.title }}</p>
-                <div class="list-group">
-                    <h4 class="list-group-item active"><strong>List Of Songs</strong></h4>
-                    {% for song in album.song_set.all %}
-                        <a href="{% url 'main:show_song' song.id %}" class="list-group-item">
-                            {{ song.title }}
-                        </a>
-                    {% endfor %}
+            <div class="col-md-1"></div>
 
-                    {% if album.song_set.count == 0 %}
-                        <li class="list-group-item">No Songs Yet :(</li>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="col-md-9">
+            <div class="col-md-10">
 
                 <div class="thumbnail row">
+                    <div class="col-xs-12">
+                        <h2>{{ song.title }}</h2>
+                    </div>
+
+                    <div class="col-xs-12 col-md-12 col-sm-12 listen">
+                        <audio src="{{ song.file_src.url }}" controls></audio>
+                    </div>
+
                     <div class="col-xs-12 col-sm-6 col-md-3">
-                        <img class="image" height="200px" width="100%" src="{{ album.logo.url }}" alt="{{ album.title }}">
+                        <img class="image" height="200px" width="100%" src="{{ song.album.logo.url }}" alt="{{ song.title }}">
                     </div>
                     <div class="col-xs-12 col-sm-6 col-md-9">
-                        <div class="caption-full">
-                            <h4>{{ album.title }}</h4>
-                            <p> {{ album.desc|safe }} </p>
+                        <div class="caption-full text-center">
+                            <p> {{ song.lyrics|safe }} </p>
                         </div>
+                    </div>
+                    <div class="col-xs-12">
                         <div class="ratings">
-                            <p class="pull-right">{{ album.review_set.all|length }}</p>
+                            <p class="pull-right">{{ song.review_set.all|length }}</p>
                             <p>
                                 {{ star_temp|safe }}
                                 {{ stars }} stars
@@ -70,7 +65,7 @@
 
                     <hr>
                     <div class="clear"></div>
-                    {% for review in album.review_set.all %}
+                    {% for review in song.review_set.all %}
                         <div class="row">
                             <div class="col-md-12">
                                 {% if review.stars > 0 %}
@@ -191,6 +186,14 @@
 
         .stars > span{
             padding-left: 10px;
+        }
+
+        audio{
+            width: 100%;
+        }
+
+        .listen{
+            margin-bottom: 50px;
         }
 
     </style>

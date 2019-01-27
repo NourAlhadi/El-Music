@@ -65,9 +65,41 @@ def show_album(request, id):
 
     if not album:
         return render(request,'main/http404.html')
+
+    if request.method == "POST":
+        fstars = request.POST.get("stars")
+        freview = request.POST.get("review")
+        fperson = request.POST.get("person")
+        review = Review()
+        review.stars = fstars
+        review.body = freview
+        review.albums = album[0]
+        review.person = fperson
+        review.save()
+
     album = album[0]
-    return render(request, 'main/show_albums.html', {
-        'album': album
+
+    all_reviews = 0
+    stars = 0
+
+    reviews = album.review_set
+    for review in reviews.iterator():
+        stars += review.stars
+        all_reviews += 1
+
+    stars /= max(all_reviews,1)
+    stars = round(stars)
+
+    star_temp = ""
+    for _ in range(stars):
+        star_temp += "<span class=\"glyphicon glyphicon-star\"></span>"
+    for _ in range(5 - stars):
+        star_temp += "<span class=\"glyphicon glyphicon-star-empty\"></span>"
+
+    return render(request, 'main/show_albums.html',{
+        'album': album,
+        'stars': stars,
+        'star_temp': star_temp
     })
 
 
@@ -115,4 +147,51 @@ def show_artist(request, id):
         'stars': stars,
         'star_temp': star_temp
     })
+
+
+def show_song(request, id):
+    try:
+        song = Song.objects.filter(id=id)
+    except(Exception, BaseException):
+        return render(request,'main/http404.html')
+
+    if not song:
+        return render(request,'main/http404.html')
+
+    if request.method == "POST":
+        fstars = request.POST.get("stars")
+        freview = request.POST.get("review")
+        fperson = request.POST.get("person")
+        review = Review()
+        review.stars = fstars
+        review.body = freview
+        review.song = song[0]
+        review.person = fperson
+        review.save()
+
+    song = song[0]
+
+    all_reviews = 0
+    stars = 0
+
+    reviews = song.review_set
+    for review in reviews.iterator():
+        stars += review.stars
+        all_reviews += 1
+
+    stars /= max(all_reviews,1)
+    stars = round(stars)
+
+    star_temp = ""
+    for _ in range(stars):
+        star_temp += "<span class=\"glyphicon glyphicon-star\"></span>"
+    for _ in range(5 - stars):
+        star_temp += "<span class=\"glyphicon glyphicon-star-empty\"></span>"
+
+    return render(request, 'main/show_song.html',{
+        'song': song,
+        'stars': stars,
+        'star_temp': star_temp
+    })
+
 

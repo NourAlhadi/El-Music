@@ -22,6 +22,8 @@ urlpatterns = [
     # /album/<id>
     url(r'^artist/(?P<id>[0-9]+)/$', views.show_artist, name='show_artist'),
 
+    # /song/<id>
+    url(r'^song/(?P<id>[0-9]+)/$', views.show_song, name='show_song'),
 
     # /
     url(r'^$', views.index, name='index'),
