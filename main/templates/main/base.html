@@ -12,7 +12,21 @@
             font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
         }
 
-        footer{background-color: #111; height: 80px; padding-top: 30px; color:#9d9d9d}
+
+        footer{
+            height: 80px; padding-top: 30px; margin-top: 80px;
+        }
+
+        .footer {
+          width: 100%;
+          background-color: #111;
+          color:#9d9d9d;
+          text-align: center;
+        }
+
+        .navbar, .navbar-form .form-group .input-group *{
+            border-radius: 0!important;
+        }
     </style>
     {% block css %}{% endblock %}
 </head>
@@ -33,9 +47,9 @@
         <div class="navbar-collapse collapse" id="searchbar">
 
             <ul class="nav navbar-nav navbar-left">
-                <li class="{% block art_active %}{% endblock %}"><a href=""><span class="glyphicon glyphicon-user"></span>&nbsp;Artists</a></li>
-                <li><a href="{% block alb_active %}{% endblock %}"><span class="glyphicon glyphicon-cd"></span>&nbsp;Albums</a></li>
-                <li><a href="{% block sng_active %}{% endblock %}"><span class="glyphicon glyphicon-music"></span>&nbsp;Songs</a></li>
+                <li class="{% block art_active %}{% endblock %}"><a href="{% url 'main:all_artists' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Artists</a></li>
+                <li class="{% block alb_active %}{% endblock %}"><a href="{% url 'main:all_albums' %}"><span class="glyphicon glyphicon-cd"></span>&nbsp;Albums</a></li>
+                <li class="{% block sng_active %}{% endblock %}"><a href="{% url 'main:all_songs' %}"><span class="glyphicon glyphicon-music"></span>&nbsp;Songs</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href=""><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>

@@ -25,6 +25,15 @@ urlpatterns = [
     # /song/<id>
     url(r'^song/(?P<id>[0-9]+)/$', views.show_song, name='show_song'),
 
+    # /artists/
+    url(r'^artists/$', views.all_artists, name='all_artists'),
+
+    # /albums/
+    url(r'^albums/$', views.all_albums, name='all_albums'),
+
+    # /songs/
+    url(r'^songs/$', views.all_songs, name='all_songs'),
+
     # /
     url(r'^$', views.index, name='index'),
 ]

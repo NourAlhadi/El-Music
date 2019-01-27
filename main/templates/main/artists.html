@@ -1,0 +1,124 @@
+{% extends 'main/base.html' %}
+
+{% block art_active %}active{% endblock %}
+{% block title %} El Music || Artists  {% endblock %}
+
+
+{% block body %}
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="well-lg well">
+                    <form class="manipulate" method="get">
+                        <div class="row">
+                            <h3 class="col-xs-2">Sort by:</h3>
+                            <div class="col-xs-10">
+                                <select name="sort" title="sortBy">
+                                    <option value="none" selected>Sorting Parameter</option>
+                                    <option value="name">Name (Alphabetical)</option>
+                                    <option value="rates">On fire!! (rated by highest number of people)</option>
+                                    <option value="stars">Big shot :D (top rated by people)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-5">
+                                <input type="submit" value="Go!!" class="btn btn-info btn-lg">
+                            </div>
+                            <div class="col-xs-7"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">All artists on system
+                </h1>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        {% for artist in artists %}
+            {% if forloop.first %}<div class="row">{% endif %}
+                <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-6 col-md-3 portfolio-item">
+                    <div class="card">
+                        <a class="anchor" href="{% url 'main:show_artist' artist.id %}">
+                            <img src="{{ artist.image.url }}" alt="{{ artist.name }}" width="100%">
+                            <div class="cont">
+                                <h4><b>{{ artist.name }}</b></h4>
+                                <p> A total of {{ artist.album_set.all|length}} albums </p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% if forloop.counter|divisibleby:4 %}</div><div class="row">{% endif %}
+            {% if forloop.last %}</div>{% endif %}
+        {% endfor %}
+
+        {% if albums.count == 0 %}
+            <!-- Row -->
+            <div class="row">
+                <div class="col-sm-8 alert alert-danger">
+                    No Artists Yet!!
+                </div>
+            </div>
+            <!-- /.row -->
+        {% endif %}
+
+    </div>
+    <!-- /.container -->
+{% endblock %}
+
+{% block css %}
+    <style>
+        .portfolio-item {
+            margin-bottom: 25px;
+        }
+
+
+        .card {
+            box-shadow: 8px 8px 16px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 8px 8px 16px 0 rgba(0,0,0,0.5);
+        }
+
+        .card {
+            box-shadow: 8px 8px 16px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+        img {
+            border-radius: 5px 5px 0 0;
+            height: 200px;
+        }
+        .anchor{
+            color: inherit;
+        }
+        .anchor:hover{
+            text-decoration: none;
+        }
+
+        .cont{
+            padding: 2px 16px;
+        }
+
+
+
+        .manipulate .row{
+            margin-top: 10px;
+        }
+        .manipulate .row .col-xs-10, .manipulate .row .col-xs-10 select{
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}

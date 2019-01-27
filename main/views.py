@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import *
 from .forms import AlbumForm, ArtistForm, SongForm
+from .utils import *
 
 
 def index(request):
@@ -73,8 +74,9 @@ def show_album(request, id):
         review = Review()
         review.stars = fstars
         review.body = freview
-        review.albums = album[0]
+        review.album = album[0]
         review.person = fperson
+        print(review)
         review.save()
 
     album = album[0]
@@ -195,3 +197,55 @@ def show_song(request, id):
     })
 
 
+def all_artists(request):
+    artists = Artist.objects.all()
+    criteria = 'stars'
+    if request.GET.get('sort') != 'none':
+        criteria = request.GET.get('sort')
+
+    if criteria == 'stars':
+        artists = sorted(artists, key=lambda a: stars(a.review_set))
+    elif criteria == 'rates':
+        artists = sorted(artists, key=lambda a: rates(a.review_set))
+    elif criteria == 'name':
+        artists = sorted(artists, key=lambda a: name(a.name))
+
+    return render(request,'main/artists.html',{
+        'artists': artists
+    })
+
+
+def all_albums(request):
+    albums = Album.objects.all()
+    criteria = 'stars'
+    if request.GET.get('sort') != 'none':
+        criteria = request.GET.get('sort')
+
+    if criteria == 'stars':
+        albums = sorted(albums, key=lambda a: stars(a.review_set))
+    elif criteria == 'rates':
+        albums = sorted(albums, key=lambda a: rates(a.review_set))
+    elif criteria == 'name':
+        albums = sorted(albums, key=lambda a: name(a.title))
+
+    return render(request,'main/albums.html',{
+        'albums': albums
+    })
+
+
+def all_songs(request):
+    songs = Song.objects.all()
+    criteria = 'stars'
+    if request.GET.get('sort') != 'none':
+        criteria = request.GET.get('sort')
+
+    if criteria == 'stars':
+        songs = sorted(songs, key=lambda a: stars(a.review_set))
+    elif criteria == 'rates':
+        songs = sorted(songs, key=lambda a: rates(a.review_set))
+    elif criteria == 'name':
+        songs = sorted(songs, key=lambda a: name(a.title))
+
+    return render(request,'main/songs.html',{
+        'songs': songs
+    })
