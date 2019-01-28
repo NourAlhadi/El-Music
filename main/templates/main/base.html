@@ -32,7 +32,6 @@
 </head>
 <body>
 
-
 <nav class="navbar navbar-inverse">
     <div class="container">
         <div class="navbar-header">
@@ -52,8 +51,13 @@
                 <li class="{% block sng_active %}{% endblock %}"><a href="{% url 'main:all_songs' %}"><span class="glyphicon glyphicon-music"></span>&nbsp;Songs</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href=""><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
-                <li><a href=""><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;SignUp</a></li>
+                {% if not user.is_authenticated %}
+                    <li><a href="{% url 'main:login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
+                    <li><a href="{% url 'main:signup' %}"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;SignUp</a></li>
+                {% else %}
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;{{ user.username }}</a></li>
+                    <li><a href="{% url 'main:logout' %}" data-toggle="modal"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout</a></li>
+                {% endif %}
             </ul>
 
             <form class="navbar-form">

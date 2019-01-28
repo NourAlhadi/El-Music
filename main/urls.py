@@ -1,4 +1,6 @@
 from django.conf.urls import url
+from django.urls import path, include
+
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -33,6 +35,9 @@ urlpatterns = [
 
     # /songs/
     url(r'^songs/$', views.all_songs, name='all_songs'),
+
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('accounts.urls')),
 
     # /
     url(r'^$', views.index, name='index'),
