@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, render_to_response
 from .models import *
 from .forms import AlbumForm, ArtistForm, SongForm
 from .utils import *
+from fuzzywuzzy import fuzz
 
 
 def handler404(request, exception, template_name="404.html"):
@@ -17,9 +18,46 @@ def handler500(request, exception, template_name="500.html"):
 
 
 def index(request):
-    alb = Album.objects.all()
-    art = Artist.objects.all()
-    song = Song.objects.all()
+    # Fetching All
+    alb = c_alb = Album.objects.all()
+    art = c_art = Artist.objects.all()
+    song = c_song = Song.objects.all()
+
+    # Sorting by rates
+    art = sorted(art, key=lambda a: rates(a.review_set))
+    alb = sorted(alb, key=lambda a: rates(a.review_set))
+    song = sorted(song, key=lambda a: rates(a.review_set))
+
+    # Checking for search
+    term = request.GET.get('term')
+    if term is not None and term != '':
+        alb = []
+        art = []
+        song = []
+        for a in c_art:
+            if fuzz.partial_token_set_ratio(str(term),str(a.name)) > 70:
+                art.append(a)
+        for a in c_alb:
+            if fuzz.partial_token_set_ratio(str(term), str(a.title)) > 70:
+                alb.append(a)
+                continue
+            if fuzz.partial_token_set_ratio(str(term), str(a.artist.name)) > 70:
+                alb.append(a)
+
+        for s in c_song:
+            if fuzz.partial_token_set_ratio(str(term), str(s.title)) > 70:
+                song.append(s)
+                continue
+            if fuzz.partial_token_set_ratio(str(term),str(s.album.title)) > 70:
+                song.append(s)
+                continue
+            if fuzz.partial_token_set_ratio(str(term), str(s.album.artist.name)) > 70:
+                song.append(s)
+    # If not slice
+    else:
+        art = art[:10]
+        alb = alb[:10]
+        song = song[:10]
 
     return render(request, 'main/index.html', {
         'albums': alb,
@@ -33,7 +71,7 @@ def artist_form(request):
         form = ArtistForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('main:index')
     else:
         form = ArtistForm()
     return render(request, 'main/add.html', {
@@ -47,7 +85,7 @@ def album_form(request):
         form = AlbumForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('main:index')
     else:
         form = AlbumForm()
     return render(request, 'main/add.html', {
@@ -61,7 +99,7 @@ def song_form(request):
         form = SongForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('main:index')
     else:
         form = SongForm()
     return render(request, 'main/add.html', {

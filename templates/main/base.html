@@ -27,6 +27,10 @@
         .navbar, .navbar-form .form-group .input-group *{
             border-radius: 0!important;
         }
+
+        #my-span{
+            cursor: pointer;
+        }
     </style>
     {% block css %}{% endblock %}
 </head>
@@ -60,11 +64,11 @@
                 {% endif %}
             </ul>
 
-            <form class="navbar-form">
+            <form id="search-form" class="navbar-form" action="{% url 'main:index' %}">
                 <div class="form-group" style="display:inline;">
                     <div class="input-group" style="display:table;">
-                        <input class="form-control" name="search" placeholder="Search Artists, Albums and Songs" autocomplete="off" type="text">
-                        <span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-search"></span></span>
+                        <input class="form-control" name="term" placeholder="Search Artists, Albums and Songs" autocomplete="off" type="text">
+                        <span id="my-span" onclick="triggerForm()" class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-search"></span></span>
                     </div>
                 </div>
             </form>
@@ -90,6 +94,10 @@
                 var ntop = h - 80;
                 if (pos.top < h) $("footer").css({top:ntop});
             });
+
+     function triggerForm(){
+         $("#search-form").submit();
+     }
 </script>
 {% block js %}{% endblock %}
 </body>

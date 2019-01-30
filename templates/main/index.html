@@ -31,7 +31,7 @@
             {% if forloop.last %}</div>{% endif %}
         {% endfor %}
 
-        {% if songs.count == 0 %}
+        {% if songs|length == 0 %}
             <!-- Row -->
             <div class="row">
                 <div class="col-sm-8 alert alert-danger">
@@ -68,7 +68,7 @@
             {% if forloop.last %}</div>{% endif %}
         {% endfor %}
 
-        {% if albums.count == 0 %}
+        {% if albums|length == 0 %}
             <!-- Row -->
             <div class="row">
                 <div class="col-sm-8 alert alert-danger">
@@ -104,7 +104,7 @@
             {% if forloop.last %}</div>{% endif %}
         {% endfor %}
 
-        {% if albums.count == 0 %}
+        {% if artists|length == 0 %}
             <!-- Row -->
             <div class="row">
                 <div class="col-sm-8 alert alert-danger">
