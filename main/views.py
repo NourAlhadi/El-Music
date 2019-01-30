@@ -90,6 +90,7 @@ def show_album(request, id):
         review.person = fperson
         print(review)
         review.save()
+        return redirect('main:show_album', id=id)
 
     album = album
 
@@ -136,6 +137,7 @@ def show_artist(request, id):
         review.artist = artist
         review.person = fperson
         review.save()
+        return redirect('main:show_artist', id=id)
 
     artist = artist
 
@@ -182,6 +184,7 @@ def show_song(request, id):
         review.song = song
         review.person = fperson
         review.save()
+        return redirect('main:show_song', id=id)
 
     song = song
 

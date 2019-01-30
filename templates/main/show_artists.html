@@ -136,9 +136,11 @@
                                     {{ review.time|date:'Y-m-d | H:i' }}
 
                                     {% if user.is_authenticated %}
-                                        {% if user.username|stringformat:"s" == review.person|stringformat:"s" %}
+                                        <span class="review-del" style="display: none">
+                                            <span style="display: none" class="username">{{ user.username }}</span>
+                                            <span style="display: none" class="person">{{ review.person }}</span>
                                             <a class="no-review" href="{% url 'main:remove_review' id=review.id %}"><span class="btn btn-danger btn-sm">x</span></a>
-                                        {% endif %}
+                                        </span>
                                     {% endif %}
                                 </span>
                                 <p>{{ review.body }}</p>
@@ -413,5 +415,20 @@
                 }
             });
         }
+
+
+        $(document).ready(function(){
+            var all = $(".review-del");
+            for (var i=0;i<all.length;i++){
+                var curr = all[i];
+                var username = curr.children[0].innerText;
+                var person = curr.children[1].innerText;
+                while (person.search(' ') !== -1) person = person.replace(' ','');
+                console.log("'" + username + "' '" + person + "'");
+                if (username === person){
+                    curr.style.display = 'inline';
+                }
+            }
+        });
     </script>
 {% endblock %}
