@@ -1,7 +1,19 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from .models import *
 from .forms import AlbumForm, ArtistForm, SongForm
 from .utils import *
+
+
+def handler404(request, exception, template_name="404.html"):
+    response = render_to_response("404.html")
+    response.status_code = 404
+    return response
+
+
+def handler500(request, exception, template_name="500.html"):
+    response = render_to_response("500.html")
+    response.status_code = 500
+    return response
 
 
 def index(request):
@@ -59,13 +71,13 @@ def song_form(request):
 
 
 def show_album(request, id):
-    try:
-        album = Album.objects.filter(id=id)
-    except(Exception, BaseException):
-        return render(request,'main/http404.html')
-
-    if not album:
-        return render(request,'main/http404.html')
+    album = Album.objects.filter(id=id)
+    if len(album) == 0:
+        return render(request,'error.html',{
+            'error_title': 'Request Error',
+            'error_body': 'You request contained an error: Album not found'
+        })
+    album = album[0]
 
     if request.method == "POST":
         fstars = request.POST.get("stars")
@@ -74,12 +86,12 @@ def show_album(request, id):
         review = Review()
         review.stars = fstars
         review.body = freview
-        review.album = album[0]
+        review.album = album
         review.person = fperson
         print(review)
         review.save()
 
-    album = album[0]
+    album = album
 
     all_reviews = 0
     stars = 0
@@ -89,7 +101,7 @@ def show_album(request, id):
         stars += review.stars
         all_reviews += 1
 
-    stars /= max(all_reviews,1)
+    stars /= max(all_reviews, 1)
     stars = round(stars)
 
     star_temp = ""
@@ -98,7 +110,7 @@ def show_album(request, id):
     for _ in range(5 - stars):
         star_temp += "<span class=\"glyphicon glyphicon-star-empty\"></span>"
 
-    return render(request, 'main/show_albums.html',{
+    return render(request, 'main/show_albums.html', {
         'album': album,
         'stars': stars,
         'star_temp': star_temp
@@ -106,13 +118,13 @@ def show_album(request, id):
 
 
 def show_artist(request, id):
-    try:
-        artist = Artist.objects.filter(id=id)
-    except(Exception, BaseException):
-        return render(request,'main/http404.html')
-
-    if not artist:
-        return render(request,'main/http404.html')
+    artist = Artist.objects.filter(id=id)
+    if len(artist) == 0:
+        return render(request,'error.html',{
+            'error_title': 'Request Error',
+            'error_body': 'You request contained an error: Review not found'
+        })
+    artist = artist[0]
 
     if request.method == "POST":
         fstars = request.POST.get("stars")
@@ -121,11 +133,11 @@ def show_artist(request, id):
         review = Review()
         review.stars = fstars
         review.body = freview
-        review.artist = artist[0]
+        review.artist = artist
         review.person = fperson
         review.save()
 
-    artist = artist[0]
+    artist = artist
 
     all_reviews = 0
     stars = 0
@@ -135,7 +147,7 @@ def show_artist(request, id):
         stars += review.stars
         all_reviews += 1
 
-    stars /= max(all_reviews,1)
+    stars /= max(all_reviews, 1)
     stars = round(stars)
 
     star_temp = ""
@@ -144,7 +156,7 @@ def show_artist(request, id):
     for _ in range(5 - stars):
         star_temp += "<span class=\"glyphicon glyphicon-star-empty\"></span>"
 
-    return render(request, 'main/show_artists.html',{
+    return render(request, 'main/show_artists.html', {
         'artist': artist,
         'stars': stars,
         'star_temp': star_temp
@@ -152,13 +164,13 @@ def show_artist(request, id):
 
 
 def show_song(request, id):
-    try:
-        song = Song.objects.filter(id=id)
-    except(Exception, BaseException):
-        return render(request,'main/http404.html')
-
-    if not song:
-        return render(request,'main/http404.html')
+    song = Song.objects.filter(id=id)
+    if len(song) == 0:
+        return render(request,'error.html',{
+            'error_title': 'Request Error',
+            'error_body': 'You request contained an error: Song not found'
+        })
+    song = song[0]
 
     if request.method == "POST":
         fstars = request.POST.get("stars")
@@ -167,11 +179,11 @@ def show_song(request, id):
         review = Review()
         review.stars = fstars
         review.body = freview
-        review.song = song[0]
+        review.song = song
         review.person = fperson
         review.save()
 
-    song = song[0]
+    song = song
 
     all_reviews = 0
     stars = 0
@@ -181,7 +193,7 @@ def show_song(request, id):
         stars += review.stars
         all_reviews += 1
 
-    stars /= max(all_reviews,1)
+    stars /= max(all_reviews, 1)
     stars = round(stars)
 
     star_temp = ""
@@ -190,7 +202,7 @@ def show_song(request, id):
     for _ in range(5 - stars):
         star_temp += "<span class=\"glyphicon glyphicon-star-empty\"></span>"
 
-    return render(request, 'main/show_song.html',{
+    return render(request, 'main/show_song.html', {
         'song': song,
         'stars': stars,
         'star_temp': star_temp
@@ -210,7 +222,7 @@ def all_artists(request):
     elif criteria == 'name':
         artists = sorted(artists, key=lambda a: name(a.name))
 
-    return render(request,'main/artists.html',{
+    return render(request, 'main/artists.html', {
         'artists': artists
     })
 
@@ -228,7 +240,7 @@ def all_albums(request):
     elif criteria == 'name':
         albums = sorted(albums, key=lambda a: name(a.title))
 
-    return render(request,'main/albums.html',{
+    return render(request, 'main/albums.html', {
         'albums': albums
     })
 
@@ -246,6 +258,6 @@ def all_songs(request):
     elif criteria == 'name':
         songs = sorted(songs, key=lambda a: name(a.title))
 
-    return render(request,'main/songs.html',{
+    return render(request, 'main/songs.html', {
         'songs': songs
     })

@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'wux^lu+c-w6o+3v2di&j*n6myk!c(^&wpuyy+wr8a#b$#1^emz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['localhost','192.168.1.107']
+ALLOWED_HOSTS = ['localhost', '192.168.1.107']
 
 
 # Application definition
@@ -46,6 +46,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -115,15 +116,23 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
+STATIC_URL = '/_static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATIC_URL = '/static/'
-
-MEDIA_URL = '/media/'
+MEDIA_URL = '/_media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'elmusic.team@gmail.com'
+EMAIL_HOST_PASSWORD = 'elmusic1234'
+
+AUTH_USER_MODEL = 'accounts.ElmusicUser'
