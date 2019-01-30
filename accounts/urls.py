@@ -29,4 +29,7 @@ urlpatterns = [
 
     # /accounts/remove/album
     url(r'^remove/review/(?P<id>[0-9]+)/$', views.remove_review, name='remove_review'),
+
+    # /accounts/my
+    url(r'^my/$', views.show_profile, name='show_profile'),
 ]

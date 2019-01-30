@@ -1,0 +1,226 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+El Music - {{ user.username }}
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-10">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#artists">My Artists</a></li>
+                <li><a data-toggle="tab" href="#albums">My Albums</a></li>
+                <li><a data-toggle="tab" href="#songs">My Songs</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="artists" class="tab-pane fade in active">
+                    <h3>My Artists</h3>
+                    <div>
+                        {% if user.fav_artists.all|length == 0 %}
+                            <div class="alert alert-danger">
+                            You have no favourite artists, add one and it will be here!!
+                            </div>
+                        {% else %}
+                            <table id="mytable">
+                                <tr>
+                                    <th>Artist ID</th>
+                                    <th>Artist Image</th>
+                                    <th>Artist Name</th>
+                                    <th>Artist Albums Count</th>
+                                    <th>TODO</th>
+                                </tr>
+                                {% for artist in user.fav_artists.all %}
+                                    <tr id="artist-{{ artist.id }}">
+                                        <td>{{ artist.id }}</td>
+                                        <td>
+                                            <img src="{{ artist.image.url }}" alt="{{ artist.name }}" class="img-rounded img-responsive img-thumbnail" height="100px" width="100px">
+                                        </td>
+                                        <td>{{ artist.name }}</td>
+                                        <td>{{ artist.album_set.all|length }}</td>
+                                        <td class="todo">
+                                            <a href="{% url 'main:show_artist' id=artist.id %}" class="btn btn-info">Visit Page</a>
+                                            <a href="#" onclick="remove_artist({{ user.id }},{{ artist.id }})" class="btn btn-danger">Remove</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        {% endif %}
+                    </div>
+                </div>
+                <div id="albums" class="tab-pane fade">
+                    <h3>My Albums</h3>
+                    <div>
+                        {% if user.fav_albums.all|length == 0 %}
+                            <div class="alert alert-danger">
+                            You have no favourite albums, add one and it will be here!!
+                            </div>
+                        {% else %}
+                            <table id="mytable">
+                                <tr>
+                                    <th>Album ID</th>
+                                    <th>Album Logo</th>
+                                    <th>Album Title</th>
+                                    <th>Album Albums Count</th>
+                                    <th>TODO</th>
+                                </tr>
+                                {% for album in user.fav_albums.all %}
+                                    <tr id="album-{{ album.id }}">
+                                        <td>{{ album.id }}</td>
+                                        <td>
+                                            <img src="{{ album.logo.url }}" alt="{{ album.title }}" class="img-rounded img-responsive img-thumbnail" height="100px" width="100px">
+                                        </td>
+                                        <td>{{ album.title }}</td>
+                                        <td>{{ album.album_set.all|length }}</td>
+                                        <td class="todo">
+                                            <a href="{% url 'main:show_album' id=album.id %}" class="btn btn-info">Visit Page</a>
+                                            <a href="#" onclick="remove_album({{ user.id }},{{ album.id }})" class="btn btn-danger">Remove</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        {% endif %}
+                    </div>
+                </div>
+                <div id="songs" class="tab-pane fade">
+                    <h3>My Songs</h3>
+                    <div>
+                        {% if user.fav_songs.all|length == 0 %}
+                            <div class="alert alert-danger">
+                            You have no favourite songs, add one and it will be here!!
+                            </div>
+                        {% else %}
+                            <table id="mytable">
+                                <tr>
+                                    <th>Song ID</th>
+                                    <th>Song Logo</th>
+                                    <th>Song Title</th>
+                                    <th>Song Songs Count</th>
+                                    <th>TODO</th>
+                                </tr>
+                                {% for song in user.fav_songs.all %}
+                                    <tr id="song-{{ song.id }}">
+                                        <td>{{ song.id }}</td>
+                                        <td>
+                                            <img src="{{ song.album.logo.url }}" alt="{{ song.title }}" class="img-rounded img-responsive img-thumbnail" height="100px" width="100px">
+                                        </td>
+                                        <td>{{ song.title }}</td>
+                                        <td>{{ song.song_set.all|length }}</td>
+                                        <td class="todo">
+                                            <a href="{% url 'main:show_song' id=song.id %}" class="btn btn-info">Visit Page</a>
+                                            <a href="#" onclick="remove_song({{ user.id }},{{ song.id }})" class="btn btn-danger">Remove</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1"></div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block css %}
+    <style>
+    #mytable {
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    #mytable td, #mytable th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    
+    #mytable tr:nth-child(even){background-color: #f2f2f2;}
+    
+    #mytable tr:hover {background-color: #ddd;}
+    
+    #mytable th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: rgba(51,122,183,1)!important;
+      color: white;
+    }
+
+    .todo .btn-info{
+        background-color: rgba(51,122,183,.7)!important;
+        border-color: rgba(51,122,183,.7)!important;
+    }
+
+    .todo .btn-info:hover{
+        background-color: rgba(51,122,183,1)!important;
+        border-color: rgba(51,122,183,1)!important;
+    }
+    </style>
+{% endblock %}
+
+{% block js %}
+    <script>
+        function remove_artist(user_id,artist_id){
+
+            $.ajax({
+                url: '{% url 'main:remove_fav_artist' %}',
+                data: {
+                    'user_id': user_id,
+                    'artist_id': artist_id
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#artist-" + artist_id).hide(1);
+                },
+                error: function(data){
+                    console.log(data);
+                }
+            });
+        }
+
+
+
+        function remove_album(user_id,album_id){
+
+            $.ajax({
+                url: '{% url 'main:remove_fav_album' %}',
+                data: {
+                    'user_id': user_id,
+                    'album_id': album_id
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#album-" + album_id).hide(1);
+                },
+                error: function(data){
+                    console.log(data);
+                }
+            });
+        }
+
+
+        function remove_song(user_id,song_id){
+
+            $.ajax({
+                url: '{% url 'main:remove_fav_song' %}',
+                data: {
+                    'user_id': user_id,
+                    'song_id': song_id
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#song-" + song_id).hide(1);
+                },
+                error: function(data){
+                    console.log(data);
+                }
+            });
+        }
+    </script>
+{% endblock %}

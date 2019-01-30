@@ -139,7 +139,6 @@ def remove_artist(request):
         })
     user_id = request.GET.get('user_id')
     artist_id = request.GET.get('artist_id')
-
     user = ElmusicUser.objects.filter(pk=user_id)
     if len(user) == 0:
         data = {
@@ -149,7 +148,7 @@ def remove_artist(request):
         return JsonResponse(data)
     user = user[0]
     artist = Artist.objects.filter(pk=artist_id)
-    if len(artist):
+    if len(artist) == 0:
         data = {
             'added': False,
             'message': 'Invalid Artist',
@@ -176,11 +175,12 @@ def add_album(request):
             'error_body': 'For some reason you managed to access this route <br /> but we\'re sorry to inform you '
                           'that this route accepts only ajax requests '
         })
+
     user_id = request.GET.get('user_id')
     album_id = request.GET.get('album_id')
 
     user = ElmusicUser.objects.filter(pk=user_id)
-    if len(user):
+    if len(user) == 0:
         data = {
             'added': False,
             'message': 'Invalid User',
@@ -279,3 +279,14 @@ def remove_review(request, id):
             song.review_set.remove(review)
             song.save()
         return redirect('main:show_song', id=song_id)
+
+
+def show_profile(request):
+    if not request.user.is_authenticated:
+        return redirect('main:login')
+    user = request.user
+
+    return render(request, 'main/profile_show.html', {
+        'user': user,
+    })
+

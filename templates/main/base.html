@@ -55,7 +55,7 @@
                     <li><a href="{% url 'main:login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
                     <li><a href="{% url 'main:signup' %}"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;SignUp</a></li>
                 {% else %}
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;{{ user.username }}</a></li>
+                    <li><a href="{% url 'main:show_profile' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;{{ user.username }}</a></li>
                     <li><a href="{% url 'main:logout' %}" data-toggle="modal"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout</a></li>
                 {% endif %}
             </ul>
